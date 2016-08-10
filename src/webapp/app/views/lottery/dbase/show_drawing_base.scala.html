@@ -1,0 +1,30 @@
+@(base: models.lottery.dbase.DrawingBase, lid: Long)(implicit session: play.api.mvc.Session)
+
+@import models.lottery.prize.PrizeType._
+@import utils.Format._
+
+<table>
+	<tbody>
+		<tr>
+			<td colspan="2"><a id="base_detail: @base.id.get" href="#">@base.name</a></td>
+		</tr>
+		@base.prizes.map { prize =>
+			<tr>
+				<td>
+				@if(CASH == prize.prizeType.id.get) {
+					@prize.prizeType.name
+				} else {
+					<a href="#" id="prize_ @prize.id.get - @lid" class="popup_material_prize">@prize.title</a>
+				}
+				</td>
+				<td>
+				@if(CASH == prize.prizeType.id.get) {
+					@currency(prize.value)
+				} else {
+					@if("000" != prize.value) {@currency(prize.value)}
+				}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

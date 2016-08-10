@@ -1,0 +1,60 @@
+@(templates:Seq[models.lottery.Template], lid:Long, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import controllers.auth._
+@import views.html.helpers._
+@import utils.Format._
+
+@main(title = "Allgemein", nav) {
+
+<script type="text/javascript">
+
+	$(function () {
+
+		$(".info").qtip({content:{text:"Wieviele Ziehungen sollen vom Kunden zurückverfolgt werden können?"}});
+
+		$.get("/lottery/drawingsvisible/" + "@lid", function (json) {
+			$('option[value="' + json.res + '"]').attr("selected", "selected");
+		});
+
+		$("#drawings_list tbody").on("change", "#no_of_drawings", function () {
+			var no_of_drawings = $(this).val();
+			$.post("/lottery/drawingsvisible/" + "@lid", {data:JSON.stringify(no_of_drawings)}, function (json) {
+				var success = '@Messages("number.of.drawings.visible.success")';
+				var failure = '@Messages("number.of.drawings.visible.failure")';
+				$("#message").removeClass("hidden").html("ok" == json.msg ? success : failure);
+			}, "json");
+		});
+	});
+</script>
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@msg}</p>
+
+<table id="drawings_list">
+	<thead>
+	<tr>
+		<th>Ziehungen</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<select id="no_of_drawings" name="no_of_drawings">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+			</select>
+			<a href="#" class="info"></a>
+		</td>
+	</tr>
+	</tbody>
+</table>
+}

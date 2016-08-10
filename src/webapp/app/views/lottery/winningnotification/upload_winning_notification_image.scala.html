@@ -1,0 +1,14 @@
+@(did: Long)(implicit session:play.api.mvc.Session)
+
+<p id="prize_upload_message" class='message'>@Messages("notification.upload.file.suffix.limit")</p>
+
+<div id="notification_image_upload">
+	<form id="notification_image_upload_form" action="@controllers.lottery.drawing.routes.WinningNotification.upload(did)" method="post" enctype="multipart/form-data">
+		Bildauswahl:
+		<ul>
+			<li>
+				<input id="notification_file" type="file" name="notification_file"/>
+			</li>
+		</ul>
+	</form>
+</div>

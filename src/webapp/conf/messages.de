@@ -1,0 +1,5 @@
+passwords.do.not.match=Die Passwörter stimmen nicht überein
+error.minLength=Die Mindestlänge beträgt {0} Zeichen
+error.required=Pflichtfeld
+error.email=Bitte geben Sie eine gültige E-Mail Adresse ein
+error.username.exists=Der Benutzername ist bereits vergeben

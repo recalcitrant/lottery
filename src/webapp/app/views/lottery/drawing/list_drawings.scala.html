@@ -1,0 +1,81 @@
+@(drawings:Seq[models.lottery.drawing.Drawing], isRSGV:Boolean, lotteryType:Long, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import utils.Format._
+@import utils.FieldEncrypt._
+@import models.workflow.Workflow._
+@import models.lottery.LotteryType._
+@import models.auth.User._
+
+@main(title = "Ziehungen", nav) {
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@Messages.apply(msg)}</p>
+
+<table id="drawings_list">
+	<thead>
+	<tr>
+		<th>Ziehungsdatum</th>
+		<th>Ziehungstyp</th>
+		<th>Gewinnsumme</th>
+		<th>Ziehungsbasis</th>
+		<th>Workflow</th>
+		<th>Aktionen</th>
+	</tr>
+	</thead>
+	<tbody>
+	@drawings.map { drawing =>
+	<tr class="drawing">
+		<td><a id="ddate_@drawing.id.get" href="#" class="show_drawing">@date(drawing.date.get)</a></td>
+		<td><a id="dtype_@drawing.id.get" href="#" class="show_drawing">@drawing.dbase.drawingType.name</a></td>
+		<td><a id="damount_@drawing.id.get" href="#" class="show_drawing">@currency(drawing.totalAmount)</a></td>
+		<td><a id="dbase_@drawing.id.get" href="#" class="show_drawing">@drawing.dbase.name</a></td>
+		<td>
+        @drawing.workflow.map { flow =>
+            @if(EXTENDED == lotteryType && !drawing.hasTicketUploads) {
+                Losdatei fehlt
+            } else {
+                <a id="workflow_@drawing.id.get" href="#" class="show_drawing">@drawing.workflow.map { w => @w.state.name}</a>
+                &nbsp;
+                <a id="edit_workflow_@drawing.id.get-@sign(drawing.id.get)" class="edit_workflow edit" href='@controllers.workflow.routes.Workflow.get(drawing.id.get, sign(drawing.id.get))'></a>
+            }
+        }
+		</td>
+		@if(hasPermission(session.get("username").getOrElse("undefined"), Redakteur_OR_Freigeber)) {
+			<td>
+				@if(hasPermission(session.get("username").getOrElse("undefined"), Redakteur)) {
+					@drawing.workflow.map { flow =>
+						@if(STATE_OFFEN == flow.state.id || STATE_ZURUECKGEWIESEN == flow.state.id) {
+							&nbsp;<a id="edit_drawing_@drawing.id.get-@sign(drawing.id.get)" class="edit_drawing edit" href="#"></a>
+							&nbsp;<a id="edit_winning_notification_mail_@drawing.id.get-@sign(drawing.id.get)" class="edit_winning_notification_email edit" href="#"></a>
+						}
+						@if(isRSGV || STATE_OFFEN == flow.state.id || STATE_ZURUECKGEWIESEN == flow.state.id) {
+							&nbsp;<a id="edit-prizecount_@drawing.id.get" class="edit_prize_count euro" href='@controllers.lottery.prize.routes.PrizeCount.get(drawing.id.get, sign(drawing.id.get), "")'></a>
+						}
+					}
+				}
+				@drawing.workflow.map { flow =>
+					@if(EXTENDED == lotteryType) {
+						@if(hasPermission(session.get("username").getOrElse("undefined"), Redakteur)) {
+					    @if(STATE_OFFEN == flow.state.id || STATE_ZURUECKGEWIESEN == flow.state.id) {
+							  &nbsp;<a id="upload-tickets_@drawing.id.get" class="upload_tickets page_white_get" href='@controllers.lottery.ticket.routes.TicketUpload.show(drawing.id.get, sign(drawing.id.get))'></a>
+					    }
+						}
+						@if(drawing.hasTicketUploads) {
+							&nbsp;<a id="download_tickets" class="download_tickets page_white_put" href="@controllers.lottery.ticket.routes.TicketUpload.listByDrawing(drawing.id.get, sign(drawing.id.get))"></a>
+						}
+					}
+					@if(STATE_OFFEN == flow.state.id || STATE_ZURUECKGEWIESEN == flow.state.id) {
+						@if(hasPermission(session.get("username").getOrElse("undefined"), Redakteur)) {
+							<a id="rm_drawing_@drawing.id.get-@sign(drawing.id.get)" class="rm_drawing delete" href="#"></a>
+						}
+					}
+				}
+				@if(drawing.hasNotificationHistory) {
+				  <a id="notification_history_@drawing.id.get-@sign(drawing.id.get)" class="notification_history email" href="@controllers.client.routes.NotificationHistory.listByDrawing(drawing.id.get, sign(drawing.id.get))"></a>
+				}
+			</td>
+		}
+	</tr>
+	}
+	</tbody>
+</table>
+}

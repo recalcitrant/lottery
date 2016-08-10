@@ -1,0 +1,27 @@
+@(lotteries:Seq[models.lottery.Lottery], nav: => Html)(implicit session:play.api.mvc.Session)
+
+@import controllers.auth._
+@import utils.FieldEncrypt._
+@import views.html.helpers._
+
+@main(title = "Lotteriebetreiber", nav) {
+
+<table id="lottery_list">
+	<thead>
+	<tr>
+		<th class="email">Name (Abk.)</th>
+		<th class="email">Name</th>
+		<th class="email">Userverwaltung</th>
+	</tr>
+	</thead>
+	<tbody>
+	@lotteries.map { lottery =>
+	<tr class="lottery">
+		<td><a href="#" id="showlottery_@lottery.id.get">@lottery.nameshort</a></td>
+		<td><a href="#" id="showlotterylong_@lottery.id.get">@lottery.name</a></td>
+		<td><a href='@controllers.auth.routes.Users.listByLottery(lottery.id.get, sign(lottery.id.get), "")' class="user_edit" id="lottery_users@lottery.id.get"></a></td>
+	</tr>
+	}
+	</tbody>
+</table>
+}

@@ -1,0 +1,12 @@
+@(lottery: models.lottery.Lottery, nav: => Html)
+
+<ul class="dialog">
+	<li>@lottery.name</li>
+	<li>@lottery.nameshort</li>
+	<li>@lottery.address</li>
+	<li>@lottery.zip</li>
+	<li>@lottery.city</li>
+	<li>@lottery.tel</li>
+	<li>@lottery.email</li>
+	<li>@lottery.lotteryType.name</li>
+</ul>

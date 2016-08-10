@@ -1,0 +1,21 @@
+body {
+    background-color: #f7f7f7;
+}
+
+#login {
+    background-color: #fff;
+    box-shadow: 2px 2px 5px #aaa;
+    min-height: 150px;
+    margin: 100px auto 0 auto;
+    padding-bottom: 20px;
+    position: inherit !important;
+    width: 350px;
+}
+
+form {
+    padding: 0.5em 1em;
+}
+
+button {
+    float: right;
+}

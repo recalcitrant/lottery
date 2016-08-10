@@ -1,0 +1,57 @@
+@(pcount:Seq[models.lottery.prize.PrizeCount], did:Long, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import models.lottery.prize.PrizeType
+@import utils.Format._
+@import utils.FieldEncrypt._
+
+@main(title = "Gewinnanzahl", nav) {
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@Messages.apply(msg)}</p>
+
+<form id="edit_drawing_prize_count_form" method="POST">
+
+	<ul class="dialog">
+		<li>
+			<table id="prize_count_list">
+				<thead>
+				<tr>
+					<th>Gewinn</th>
+					<th>Anzahl</th>
+				</tr>
+				</thead>
+				<tbody>
+				@pcount.map { dprize =>
+				<tr>
+					@if(PrizeType.CASH == dprize.prizeType.get) {
+					<td>@dprize.value.map(v=> currency(v))</td>
+					} else {
+					<td>@dprize.title.map(t=>t)</td>
+					}
+					<td><input id="count_@dprize.pid" name="count_@dprize.pid" value='@dprize.times.getOrElse("")' class="prize_count" maxlength="255"/></td>
+				</tr>
+				}
+				<tr>
+					<td><input type="button" id="submit_drawing_prize_count" name="submit_drawing_prize_count" value="Speichern"/></td>
+				</tr>
+				</tbody>
+			</table>
+		</li>
+
+	</ul>
+</form>
+}
+
+<script type="text/javascript">
+
+	$(function () {
+		$(".prize_count").forceNumeric();
+		pcount.setDrawingId("@did");
+		pcount.setUrl("@controllers.lottery.prize.routes.PrizeCount.update(did, sign(did))");
+		pcount.setSaveOk('@Messages("input.save.ok")');
+		pcount.setSaveNotOk('@Messages("input.save.notok")');
+		$("#submit_drawing_prize_count").on("click", (function () {
+			pcount.submit();
+		}));
+	});
+
+</script>

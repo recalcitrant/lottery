@@ -1,0 +1,11 @@
+@(history:Seq[models.workflow.WorkflowHistory])
+
+@import utils.Format._
+
+@history.map { hist =>
+<ul>
+	<li>@hist.email</li>
+	<li>@hist.state.name am:</li>
+	<li>@dateWithTime(hist.updated)</li>
+</ul>
+}

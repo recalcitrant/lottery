@@ -1,0 +1,25 @@
+@(pid: Long, files: Seq[models.lottery.prize.PrizeUpload])(implicit session:play.api.mvc.Session)
+
+@import utils.StringUtils._
+@import utils.FieldEncrypt._
+
+<p id="prize_upload_message" class='message'>@Messages("upload.file.suffix.limit")</p>
+
+<div id="prize_upload">
+	<form id="prize_upload_form" action="@controllers.lottery.prize.routes.PrizeUpload.upload(pid)" method="post" enctype="multipart/form-data">
+		<table border="0">
+			@files.map { file =>
+			<tr>
+				<td><a href="/prize/getfile/@file.id.get/@sign(file.id.get)">@removeIdPrefix(file.url)</a></td>
+				<td><a href="#" id="rm_prize_file_upload_@file.id.get" class="rm_prize_file_upload delete"></a></td>
+			</tr>
+			}
+		</table>
+		Dateiauswahl:
+		<ul>
+			<li>
+				<input id="prize_file" type="file" name="prize_file"/>
+			</li>
+		</ul>
+	</form>
+</div>

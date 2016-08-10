@@ -1,0 +1,57 @@
+@(bases:Seq[(String, Seq[models.lottery.dbase.DrawingBase])], dTypeList:Seq[models.lottery.drawing.DrawingType], lid:Long, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import controllers.auth._
+@import models.lottery.drawing.DrawingType
+@import models.lottery.dbase.DrawingBase
+@import views.html.helpers._
+@import utils.Format._
+@import utils.FieldEncrypt._
+
+@main(title = "Ziehungsbasis", nav) {
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@Messages.apply(msg)}</p>
+
+@bases.map { baseTPL =>
+	<div class="floatleft">
+		<table border="0">
+			<thead>
+			<tr>
+				<th>Basis @baseTPL._1
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			@baseTPL._2.map { base =>
+				<tr>
+					<td><a id="@base.id.get" class="show_drawing_base" href="#">@base.name</a></td>
+					@if(base.isComplete) {
+						<td><a id="use_dbase_@base.id.get" class="use" href="@controllers.lottery.drawing.routes.Drawing.shownew(base.id.get, sign(base.id.get))"></a></td>
+					}
+					@if(DrawingBase.hasDrawings(base.id.get)) {
+						<td colspan="2"></td>
+					} else {
+						<td><a id="edit_dbase_@base.id.get-@sign(base.id.get)" class="edit_drawing_base edit" href="#"></a></td>
+						<td><a id="rm_dbase_@base.id.get-@sign(base.id.get)" data-@base.id.get="@base.name" class="rm_drawing_base delete" href="#"></a></td>
+					}
+				</tr>
+			}
+			</tbody>
+		</table>
+	</div>
+}
+
+<div class="clearleft floatleft">
+	<table border="0">
+		<tr>
+			<td>
+				<a href="#" class="add add_drawing_base">Neue Ziehungsbasis anlegen</a>
+				<select name="drawing_type_select" id="drawing_type_select">
+					@dTypeList.map { dtype =>
+					<option value="@controllers.lottery.dbase.routes.DBase.shownew(lid, sign(lid), dtype.id.get)">@dtype.name</option>
+					}
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>
+}

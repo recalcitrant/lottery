@@ -1,0 +1,44 @@
+@(drawing: models.lottery.drawing.Drawing, nav: => Html, msg: String = "")(implicit session: play.api.mvc.Session)
+
+@import utils.StringUtils._
+@import utils.FieldEncrypt._
+
+@main(title = "Gewinnbenachrichtigung", nav) {
+    <p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@Messages.apply(msg)}</p>
+    <form id="winning_notification_form" method="POST">
+        <input type="hidden" name="nid" value="@drawing.winningNotificationContent.fold(-1l)(n => n.id.get)"/>
+        <ul class="dialog">
+            <li>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Text & Bild für die Gewinnbenachrichtigung</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sortable">
+                        <tr>
+                            <td>
+                                <textarea class="textarea_upload" id="winning_notification_description" rows="30" cols="70">@drawing.winningNotificationContent.map(_.desc.getOrElse(""))</textarea>
+                            </td>
+
+                            <td>
+                                <table border="0">
+                                @drawing.winningNotificationContent.map { notification =>
+                                    @if(notification.url.isDefined) {
+                                        <tr>
+                                            <td><a target="_blank" href="/winningnotification/image/@drawing.dbase.lottery.id.get/@drawing.id.get">@removeIdPrefix(notification.url.getOrElse("Bild"))</a></td>
+                                            <td><a href="#" id="rm_notification_file_upload_@drawing.id.get" class="rm_notification_file_upload delete"></a></td>
+                                        </tr>
+                                    }
+                                }
+                                </table>
+                                Bild hinzufügen/überschreiben:&nbsp;<a href="#" id="notification_file_upload@drawing.id.get-@drawing.dbase.lottery.id.get" class="notification_file_upload page_white_get"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li><input type="button" class="save_winning_notification_content" id="save_winning_notification_content_@drawing.id.get-@sign(drawing.id.get)" name="save_winning_notification_content" value="Text Speichern"/></li>
+        </ul>
+    </form>
+}

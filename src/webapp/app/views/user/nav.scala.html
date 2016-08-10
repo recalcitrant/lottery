@@ -1,0 +1,6 @@
+@(isSuperAdmin:Boolean)
+
+<a id="user_overview" href='@controllers.auth.routes.Users.list("")' class="nav">Benutzerübersicht</a>
+@if(isSuperAdmin) {
+| <a id="lotteries_overview" href='@controllers.lottery.routes.Lottery.list' class="nav">Lotteriebetreiber</a>
+}

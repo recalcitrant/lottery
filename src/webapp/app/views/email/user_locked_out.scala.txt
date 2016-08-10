@@ -1,0 +1,7 @@
+@(username:String)
+@import utils.Config
+Der User @username hat sich nach 3 Loginversuchen ausgeschlossen.
+
+Bitte setzten Sie ein neues Passwort, der Benutzer wird dabei automatisch freigeschaltet.
+
+Zur Anwendung : @Config.getString("server.url")

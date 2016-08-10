@@ -1,0 +1,76 @@
+@(base:models.lottery.dbase.DrawingBase, prizeTypes:List[models.lottery.prize.PrizeType], nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import models.lottery.prize.PrizeType
+@import utils.Format._
+@import utils.FieldEncrypt._
+
+@main(title = "Ziehungsbasis", nav) {
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@Messages.apply(msg)}</p>
+
+<form id="edit_drawing_base_form" method="POST">
+	<input type="hidden" id="edit_drawing_base_form_dbid" name="edit_drawing_base_form_dbid" value="@base.id.get"/>
+	<ul class="dialog">
+		<li>
+			<span class="bold">Ziehungsbasis für @base.drawingType.name</span>
+		<li>
+		<li>
+			<label for="base_name">Name</label>
+			<input id="base_name" name="base_name" type="text" value="@base.name"/></li>
+		<li>
+			<table>
+				<thead>
+				<tr>
+					<th>Gewinnsumme</th>
+					<th>GewinnTyp</th>
+					<th>Hinzufügen</th>
+					<th>Löschen</th>
+				</tr>
+				</thead>
+				<tbody id="sortable">
+				@base.prizes.map { prize =>
+				<tr>
+					<td>
+						<input type="text" name="prize_@prize.id.get" id="prize_@prize.id.get" class="input_prize_row" value="@currencyInput(prize.value)" maxlength="255"/>
+						@if(PrizeType.MATERIAL == prize.prizeType.id.get) {
+						<span id="show_prize_title_@prize.id.get" class="bold">@prize.title</span>
+						<a href="#" id="edit_prize_title_@prize.id.get" class="edit_prize_title page_white_key"></a>
+						<a href="#" id="edit_prize_description_@prize.id.get" class="edit_prize_description page_white_edit"></a>
+						<a href="#" id="upload_prize_file_@prize.id.get" class="upload_prize_file page_white_get"></a>
+					</td>
+					}
+					<td>
+						<select name="prize-type_@prize.id.get" id="prize-type_@prize.id.get">
+							@prizeTypes.map { ptype =>
+							<option
+							@if(ptype.id.get == prize.prizeType.id.get){selected} value="@ptype.id.get">@ptype.name</option>
+							}
+						</select>
+					</td>
+					<td><a href="#" id="addprize_@prize.id.get" class="add add_prize_to_existing_base"></a></td>
+					<td><a id="rmprize_@prize.id.get" href="#" class="delete delete_prize_from_existing_base"></a></td>
+				</tr>
+				}
+				</tbody>
+			</table>
+		</li>
+		<li><input type="button" id="submit_existing_drawing_base" name="submit_existing_drawing_base" value="Speichern"/></li>
+	</ul>
+</form>
+}
+
+<script type="text/javascript">
+
+	$(function () {
+		dbase.setBaseId("@base.id.get");
+		dbase.setUrl("@controllers.lottery.dbase.routes.DBase.update(base.id.get, sign(base.id.get))");
+		dbase.setSaveOk('@Messages("drawingbase.save.ok")');
+		dbase.setSaveNotOk('@Messages("drawingbase.save.notok")');
+		dbase.setCash("@PrizeType.CASH");
+		dbase.setMat("@PrizeType.MATERIAL");
+		$("#submit_existing_drawing_base").on("click", (function () {
+			dbase.submitExisting();
+		}));
+	});
+
+</script>

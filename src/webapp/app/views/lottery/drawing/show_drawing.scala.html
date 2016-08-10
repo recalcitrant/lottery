@@ -1,0 +1,90 @@
+@(drawing: models.lottery.drawing.Drawing)
+
+@import utils.Format._
+@import models.lottery.prize.PrizeType._
+
+<div class="bold">
+	@drawing.dbase.drawingType.name vom @date(drawing.date.get)
+	<br/><br/>
+	@drawing.dateWinningNotification.map("Mailversand nach erfolgter Freigabe am " + dateWithTime(_)).getOrElse("Mailversand unmittelbar nach erfolgter Freigabe")
+	<br/><br/>
+	@drawing.dateNext.map { d =>
+	  Die nächste Ziehung findet statt am @date(d)
+	  <br/><br/>
+	}
+    @drawing.datePublishNext.map { d =>
+      Die nächste Veröffentlichung findet statt am @date(d)
+      <br/><br/>
+    }
+</div>
+<table id="show_drawing_digits">
+	<thead>
+	<tr>
+		<th class="email">Endziffer(n)</th>
+		<th class="email">Gewinn</th>
+	</tr>
+	</thead>
+	<tbody>
+	@drawing.prizes.filter(dp => dp.finalDigits.isDefined).map { dprize =>
+	<tr class="lottery">
+		<td>@dprize.finalDigits.map(_.digits).getOrElse("keine Angabe")</td>
+		<td>
+			@if(CASH == dprize.prize.get.prizeType.id.get) {
+			@currency(dprize.prize.get.value)
+			} else {
+			<a href="#" class="popup_material_prize" id="prize_@dprize.prize.get.id.get-@drawing.dbase.lottery.id.get" class="material_drawing_prize">@dprize.prize.get.title</a>
+			}
+		</td>
+	</tr>
+	}
+	</tbody>
+</table>
+<table id="show_drawing_pricecount">
+	<thead>
+	<tr>
+		<th colspan="4" class="email">Gewinnanzahl</th>
+	</tr>
+	</thead>
+	<tbody>
+	@drawing.countTable.map { pc =>
+	<tr>
+		<td>@formatNumber(pc.times.get)</td>
+		<td>@if(MATERIAL == pc.prizeType.get){@pc.title.get}else{Gewinne}@if(pc.hasPositiveValue){ zu}</td>
+		<td>@if(pc.hasPositiveValue){@currency(pc.value.get)}</td>
+		<td>@if(pc.hasPositiveValue){@currency(pc.total.toString)}</td>
+	</tr>
+	}
+	<tr>
+		<td colspan="4">zusammen:</td>
+	</tr>
+	<tr>
+		<td>@formatNumber(drawing.totalCount)</td>
+		<td colspan="2">Gewinne über</td>
+		<td>@currency(drawing.totalAmount)</td>
+	</tr>
+	</tbody>
+</table>
+
+@drawing.winningNotificationContent.map { c =>
+    <div>
+        <strong>Text und Bild der Gewinnbenachrichtigung:</strong><br/><br/>
+        <div>@c.desc.map(c => Html(c.replaceAll("\n","<br/>")))</div><br/>
+        @c.url.map { url =>
+            <img width="250px" src="/winningnotification/image/@drawing.dbase.lottery.id.get/@drawing.id.get"/>
+        }
+    </div>
+}
+
+<script type="text/javascript">
+
+	$(function () {
+		$('.material_drawing_prize').click(function () {
+			var id = $(this).attr("id");
+			var pid = id.substring("prize_".length);
+			$.get("/prize/showmaterial/" + pid, function (data) {
+				objDialog.dialogue(data, 400, 300);
+			});
+		});
+	});
+
+</script>

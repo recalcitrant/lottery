@@ -1,0 +1,12 @@
+@(client:models.client.Client)
+Sehr geehrte@if("Herr"== client.salutation){r}else{} @client.salutation @client.lastName,
+
+wie gewünscht wurden Ihre Daten aus der Gewinndatenbank entfernt.
+
+Sie erhalten von jetzt an keine weiteren Benachrichtigungen.
+
+Mit freundlichen Grüßen
+
+Ihre @client.branch.name
+
+Diese E-Mail wurde automatisch erstellt. Bitte antworten Sie nicht auf diese Nachricht. Gerne beantwortet Ihr Berater Ihre Fragen.

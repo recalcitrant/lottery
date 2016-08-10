@@ -1,0 +1,40 @@
+@(drawing:models.lottery.drawing.Drawing, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import utils.FieldEncrypt._
+
+@main(title = "Upload", nav) {
+
+<p class='message @if("" == msg) {hidden}'>@if("" != msg) {@Messages.apply(msg)}</p>
+
+<p id="message" class='message none'></p>
+
+@if(drawing.hasTicketUploads) {<div><a href="@controllers.lottery.ticket.routes.TicketUpload.listByDrawing(drawing.id.get, sign(drawing.id.get))">Die für diese Ziehung gespeicherten Lose als PDF herunterladen</a></div>}
+
+<script type="text/javascript">
+
+	$(function () {
+		$("#upload_ticket_file").click(function () {
+			objForm.unsetErrors("#ticket_upload_form");
+			var redirect = function () {
+				window.location.href = "/drawing/list/" + "ticket.file.save.ok";
+			}
+			objForm.submitFormWithSuccessCallback("#ticket_upload_form", redirect);
+		});
+	})
+
+</script>
+
+<div id="ticket_upload">
+	<form id="ticket_upload_form" action="@controllers.lottery.ticket.routes.TicketUpload.upload(drawing.id.get, sign(drawing.id.get))" method="post" enctype="multipart/form-data">
+		Dateiauswahl:
+		<ul>
+			<li>
+				<input id="ticket_file" name="ticket_file" type="file"/>
+			</li>
+			<li>
+				<input type="button" id="upload_ticket_file" name="upload_ticket_file" value="Hochladen"/>
+			</li>
+		</ul>
+	</form>
+</div>
+}

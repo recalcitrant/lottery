@@ -1,0 +1,83 @@
+@(drawing:models.lottery.drawing.Drawing, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import models.lottery.prize.PrizeType
+@import utils.Format._
+@import utils.DateUtils._
+@import utils.FieldEncrypt._
+
+@main(title = "Ziehung editieren", nav) {
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@Messages.apply(msg)}</p>
+
+<form id="edit_drawing_form" method="POST">
+	<ul class="dialog">
+		<li>
+			<span class="bold">Ziehungstyp: @drawing.dbase.drawingType.name</span>
+		</li>
+		<li>
+			<label for="drawing_date">Datum der aktuellen Ziehung:</label>
+			<input id="drawing_date" name="drawing_date" type="text" value="@drawing.date.map{d=>@date2Str(d)}"/>
+		</li>
+		<li>
+		  <label for="date_winning_notification">Datum des Mailversandes der aktuellen Ziehung:</label>
+		  <input id="date_winning_notification" name="date_winning_notification" type="text" value="@drawing.dateWinningNotification.map{d=>@dateTime2Str(d)}"/><a href="#" class="info"></a>
+		</li>
+		<li>
+			<label for="drawing_date_next">Datum der nächsten Ziehung:</label>
+			<input id="drawing_date_next" name="drawing_date_next" type="text" value="@drawing.dateNext.map{d=>@date2Str(d)}"/>
+		</li>
+        <li>
+            <label for="drawing_date_publish_next">Veröffentlichung der nächsten Ziehung:</label>
+            <input id="drawing_date_publish_next" name="drawing_date_publish_next" type="text" value="@drawing.datePublishNext.map{d=>@date2Str(d)}"/>
+        </li>
+		<li>
+			<table id="drawings_list">
+				<thead>
+				<tr>
+					<th>Gewinn</th>
+					<th>Endziffer(n)</th>
+					<th>Mailversand am</th>
+					<th>Hinzufügen</th>
+					<th>Löschen</th>
+				</tr>
+				</thead>
+				<tbody>
+				@drawing.prizes.sortWith((t1, t2) => t1.prize.get.sort < t2.prize.get.sort).map { dprize =>
+					<tr>
+						@if(PrizeType.CASH == dprize.prize.get.prizeType.id.get) {
+						<td>@currency(dprize.prize.get.value)</td>
+						} else {
+						<td>@dprize.prize.get.title.getOrElse("Keine Angabe")</td>
+						}
+						<td><input id="digits_@dprize.prize.get.id.get-@dprize.id.get" name="digits_@dprize.prize.get.id.get-@dprize.id.get" value="@dprize.finalDigits.map{fd=>@fd.digits}" maxlength="255"/></td>
+						<td><input class="digits_winning_notification" id="digits_winning_notification_@dprize.prize.get.id.get-@dprize.id.get" name="digits_winning_notification_@dprize.prize.get.id.get-@dprize.id.get" value="@dprize.finalDigits.map{fd=>@fd.dateWinningNotification.map{d=>@dateTime2Str(d)}}" maxlength="255"/></td>
+						<td><a href="#" id="addrowtoexistingdrawing_@dprize.prize.get.id.get-@dprize.id.get" class="add add_prize_to_existing_drawing"></a></td>
+						<td><a href="#" id="deleterowfromexistingdrawing_@dprize.prize.get.id.get-@dprize.id.get" class="delete delete_prize_from_existing_drawing"></a></td>
+					</tr>
+				}
+				<tr>
+					<td><input type="button" id="submit_existing_drawing" name="submit_existing_drawing" value="Speichern"/></td>
+				</tr>
+				</tbody>
+			</table>
+		</li>
+
+	</ul>
+</form>
+}
+
+<script type="text/javascript">
+
+	$(function () {
+		drawing.setDrawingId("@drawing.id.get");
+		drawing.setUrl("@controllers.lottery.drawing.routes.Drawing.update(drawing.id.get, sign(drawing.id.get))");
+		drawing.setSaveOk('@Messages("drawing.save.ok")');
+		drawing.setSaveNotOk('@Messages("drawing.save.notok")');
+		drawing.setCash("@PrizeType.CASH");
+		drawing.setMat("@PrizeType.MATERIAL");
+		$("#submit_existing_drawing").on("click", (function () {
+			drawing.submitExisting();
+		}));
+	});
+
+</script>

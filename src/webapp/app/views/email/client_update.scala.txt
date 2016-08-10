@@ -1,0 +1,14 @@
+@(client:models.client.Client, body:String, pwChanged:Boolean)
+Sehr geehrte@if("Herr"== client.salutation){r}else{} @client.salutation @client.lastName,
+
+@if(pwChanged){Sie haben Ihre Daten zur Gewinnbenachrichtigung und Ihr Passwort geändert.}else{Sie haben Ihre Daten zur Gewinnbenachrichtigung geändert.}
+
+Ihre Daten: @client.salutation @client.firstName @client.lastName
+@body
+
+Ihre @client.branch.name
+
+Diese E-Mail wurde automatisch erstellt. Bitte antworten Sie nicht auf diese Nachricht. Gerne beantwortet Ihr Berater Ihre Fragen.
+
+Sie können sich unter folgendem Link anmelden:
+<@client.branch.url@client.branch.loginUrl>

@@ -1,0 +1,46 @@
+@(flow:models.workflow.Workflow, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import views.html.helpers._
+@import utils.FieldEncrypt._
+@import models.workflow.Workflow._
+
+@main(title = "Workflow", nav) {
+
+<p id="message" class='message'>Ändern Sie hier den Workflowstatus</p>
+
+<ul class="actions">
+	<li>
+		<select name="info_workflow_action_select" id="info_workflow_action_select">
+			<option id="-1" value="-1">@flow.state.name</option>
+			@flow.getActions.map { action =>
+			<option value='@action.id'>@action.name</option>
+			}
+		</select>
+
+		<div id="info_workflow_action_fields"></div>
+		<input type="button" id="submit_workflow_action_link" value="Status ändern" style="display:none"/>
+	</li>
+</ul>
+
+<script type="text/javascript">
+
+	$(function () {
+		$("#info_workflow_action_select").change(function () {
+			var fieldval = $(this).val();
+			if (-1 == fieldval) {
+				$("#submit_workflow_action_link").hide();
+			} else {
+				var json = fieldval.substring(fieldval.indexOf("#_dms_separator_#") + "#_dms_separator_#".length);
+				$("#info_workflow_action_fields").empty();
+				addEmailField();
+				$("#submit_workflow_action_link").show();
+			}
+		});
+
+		$("#submit_workflow_action_link").click(function () {
+			var action = $("#info_workflow_action_select").val();
+			submitWorkflow(action, "@controllers.workflow.routes.Workflow.action(flow.did, sign(flow.did), flow.state.id)");
+		});
+	});
+</script>
+}

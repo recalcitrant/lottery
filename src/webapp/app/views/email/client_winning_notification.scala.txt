@@ -1,0 +1,20 @@
+@(client:models.client.Client, body:String, drawingdate:String, drawingType:String, lotName:String, loginUrl:String)
+Sehr geehrte@if("Herr"== client.salutation){r}else{} @client.salutation @client.lastName,
+
+bei der @drawingType der Lotterie @lotName vom @drawingdate haben folgende der von Ihnen hinterlegten Lose gewonnen:
+
+@body
+
+Bitte beachten Sie, dass diese Nachricht nur auf Ihren Angaben und hinterlegten Losnummern basiert.
+Diese Mitteilung ist keine Gewinnzusage. Insbesondere besteht aufgrund dieser Benachrichtigung kein Anspruch auf Auszahlung des Gewinns.
+
+Alle Angaben sind ohne Gewähr.
+
+Mit freundlichen Grüßen
+
+@client.branch.name
+
+Diese E-Mail wurde automatisch erstellt. Bitte antworten Sie nicht auf diese Nachricht. Gerne beantwortet Ihr Berater Ihre Fragen.
+
+Sie können diese Gewinnbenachrichtigung jederzeit abbestellen. Klicken Sie hierfür auf den folgenden Link:
+@loginUrl

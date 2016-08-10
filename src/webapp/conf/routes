@@ -1,0 +1,125 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET         /                                                       controllers.Index.index
+
+# Authentication
+
+GET         /login                                                  controllers.auth.Authentication.login
+POST        /login                                                  controllers.auth.Authentication.authenticate
+GET         /logout                                                 controllers.auth.Authentication.logout
+
+# Workflow
+GET         /workflow/get/:did/:hid                                 controllers.workflow.Workflow.get(did:Long, hid:String)
+GET         /workflow/history/:did/:hid                             controllers.workflow.Workflow.history(did:Long, hid:String)
+POST        /workflow/action/:did/:hid/:oldState                    controllers.workflow.Workflow.action(did:Long, hid:String, oldState:Long)
+
+# Usermanagement
+POST        /user/:id/del                                           controllers.auth.Users.delete(id:Long, hash:String)
+GET         /user/list                                              controllers.auth.Users.list(msg="")
+GET         /user/list/:msg                                         controllers.auth.Users.list(msg)
+GET         /user/listbylottery/:lid/:hlid                          controllers.auth.Users.listByLottery(lid:Long, hlid:String, msg="")
+GET         /user/listbylottery/:lid/:hlid/:msg                     controllers.auth.Users.listByLottery(lid:Long, hlid:String, msg)
+GET         /user/addnew/:lid/:hlid                                 controllers.auth.Users.addnew(lid:Long, hlid:String)
+GET         /user/:id/:hash                                         controllers.auth.Users.get(id:Long, hash:String)
+POST        /user/:id/update                                        controllers.auth.Users.update(id:Long)
+POST        /user/add/:lid/:hlid                                    controllers.auth.Users.add(lid:Long, hlid:String)
+
+# Lottery Overview
+GET         /lottery/list                                           controllers.lottery.Lottery.list
+GET         /lottery/:id                                            controllers.lottery.Lottery.get(id:Long)
+GET         /client/privacyterms/:bcode                             controllers.lottery.Lottery.privacyTerms(bcode:Long)
+GET         /lottery/drawingsvisible/:lid                           controllers.lottery.Misc.getDrawingsVisible(lid: Long)
+POST        /lottery/drawingsvisible/:lid                           controllers.lottery.Misc.setDrawingsVisible(lid: Long)
+
+# Client
+POST        /client/login                                           controllers.client.ClientAuthentication.authenticate
+POST        /client/add                                             controllers.client.Client.add()
+POST        /client/update                                          controllers.client.Client.update()
+POST        /client/sendpassword                                    controllers.client.Client.sendPassword()
+# not used at the moment:
+#GET  /client/view                             controllers.client.Client.view()
+GET         /client/prize/:id/:bcode                                controllers.client.PublicDrawing.prize(id:Long, bcode:String)
+GET         /client/drawing/:bcode                                  controllers.client.PublicDrawing.latestByBranch(bcode:String)
+POST        /client/drawing/:id                                     controllers.client.PublicDrawing.query(id:Long)
+POST        /client/drawing/:id/:bcode                              controllers.client.PublicDrawing.queryByDrawingAndBranch(id:Long, bcode:String)
+
+GET         /notification/history/:id/:hid                          controllers.client.NotificationHistory.listByDrawing(id:Long, hid:String)
+
+# Drawing
+GET         /drawing/list                                           controllers.lottery.drawing.Drawing.list(msg="")
+GET         /drawing/list/:msg                                      controllers.lottery.drawing.Drawing.list(msg)
+GET         /drawing/get/:id                                        controllers.lottery.drawing.Drawing.get(id :Long)
+GET         /drawing/shownew/:dbid/:dbhid                           controllers.lottery.drawing.Drawing.shownew(dbid:Long, dbhid:String)
+GET         /drawing/edit/:id/:hid                                  controllers.lottery.drawing.Drawing.edit(id:Long, hid:String, msg:String="")
+GET         /drawing/edit/:id/:hid/:msg                             controllers.lottery.drawing.Drawing.edit(id:Long, hid:String, msg)
+
+# WinningNotification (mail-teaser)
+GET         /winningnotification/get/:did/:hid                      controllers.lottery.drawing.WinningNotification.get(did:Long, hid:String, msg="")
+GET         /winningnotification/get/:did/:hid/:msg                 controllers.lottery.drawing.WinningNotification.get(did:Long, hid:String, msg)
+POST        /winningnotification/rmupload/:did                      controllers.lottery.drawing.WinningNotification.deleteUpload(did:Long)
+POST        /winningnotification/upload/:did                        controllers.lottery.drawing.WinningNotification.upload(did:Long)
+GET         /winningnotification/image/:lid/:did                    controllers.lottery.drawing.WinningNotification.getImage(lid:Long, did:Long)
+GET         /winningnotification/image/form/get/:did                controllers.lottery.drawing.WinningNotification.getUploadForm(did:Long)
+POST        /winningnotification/description/update/:id/:hid        controllers.lottery.drawing.WinningNotification.updateDescription(id:Long, hid:String)
+GET         /winningnotification/description/get/:id                controllers.lottery.drawing.WinningNotification.getDescription(id:Long)
+
+#GET         /winning-notification/edit/:id/:hid           controllers.lottery.drawing.WinningNotification.edit(id:Long, hid:String, msg:String="")
+POST        /drawing/add/:dtype                                     controllers.lottery.drawing.Drawing.add(dtype:Long)
+POST        /drawing/delete/:id/:hid                                controllers.lottery.drawing.Drawing.delete(id:Long, hid:String)
+POST        /drawing/update/:id/:hid                                controllers.lottery.drawing.Drawing.update(id:Long, hid:String)
+
+# Drawing-Prize-Count
+GET         /pricecount/get/:did/:hid                               controllers.lottery.prize.PrizeCount.get(did:Long, hid:String, msg="")
+GET         /pricecount/get/:did/:hid/:msg                          controllers.lottery.prize.PrizeCount.get(did:Long, hid:String, msg)
+POST        /pricecount/update/:did/:hid                            controllers.lottery.prize.PrizeCount.update(did:Long, hid:String)
+
+# DrawingBase
+GET         /drawingbase/shownew/:lid/:hlid/:dtype                  controllers.lottery.dbase.DBase.shownew(lid:Long, hlid:String, dtype:Long)
+POST        /drawingbase/add/:lid/:hlid/:dtype                      controllers.lottery.dbase.DBase.add(lid:Long, hlid:String, dtype:Long)
+GET         /drawingbase/list/:lid/:hlid                            controllers.lottery.dbase.DBase.list(lid:Long, hlid:String, msg="")
+GET         /drawingbase/list/:lid/:hlid/:msg                       controllers.lottery.dbase.DBase.list(lid:Long, hlid:String, msg:String)
+GET         /drawingbase/get/:id                                    controllers.lottery.dbase.DBase.get(id:Long)
+GET         /drawingbase/edit/:id/:hid                              controllers.lottery.dbase.DBase.edit(id:Long, hid:String, msg:String="")
+GET         /drawingbase/edit/:id/:hid/:msg                         controllers.lottery.dbase.DBase.edit(id:Long, hid:String, msg)
+GET         /drawingbase/prize/:id/:lid                             controllers.lottery.dbase.DBase.prize(id:Long, lid:Long)
+POST        /drawingbase/delete/:id/:hid                            controllers.lottery.dbase.DBase.delete(id:Long, hid:String)
+POST        /drawingbase/update/:id/:hid                            controllers.lottery.dbase.DBase.update(id:Long, hid:String)
+
+# DrawingPrize
+POST        /drawingprize/add/:did                                  controllers.lottery.drawing.DrawingPrize.add(did:Long)
+POST        /drawingprize/delete/:id                                controllers.lottery.drawing.DrawingPrize.delete(id:Long)
+
+# Prize
+# Unauthorized (public-website)
+GET         /prize/showfile/:id/:bid                                controllers.lottery.prize.PrizeUpload.showFile(id:Long, bid:String)
+# Authorized
+POST        /prize/delete/:id/:dbid                                 controllers.lottery.prize.Prize.delete(id:Long, dbid:Long)
+POST        /prize/add/:dbid                                        controllers.lottery.prize.Prize.add(dbid:Long)
+POST        /prize/description/update/:id                           controllers.lottery.prize.Prize.updateDescription(id:Long)
+POST        /prize/title/update/:id                                 controllers.lottery.prize.Prize.updateTitle(id:Long)
+GET         /prize/description/get/:id                              controllers.lottery.prize.Prize.getDescription(id:Long)
+GET         /prize/title/get/:id                                    controllers.lottery.prize.Prize.getTitle(id:Long)
+GET         /prize/upload/:id                                       controllers.lottery.prize.PrizeUpload.get(id:Long)
+GET         /prize/upload/count/:id                                 controllers.lottery.prize.PrizeUpload.count(id:Long)
+GET         /prize/getfile/:id/:hid                                 controllers.lottery.prize.PrizeUpload.asAttachment(id:Long, hid:String)
+GET         /prize/showfilebylid/:id/:lid                           controllers.lottery.prize.PrizeUpload.showFileByLid(id:Long, lid:Long)
+POST        /prize/upload/:id                                       controllers.lottery.prize.PrizeUpload.upload(id:Long)
+POST        /prize/rmupload/:id                                     controllers.lottery.prize.PrizeUpload.delete(id:Long)
+
+# Misc
+GET         /misc/list                                              controllers.lottery.Misc.list
+
+# Ticket
+GET         /upload/ticket/:did/:hid                                controllers.lottery.ticket.TicketUpload.show(did:Long, hid:String)
+POST        /upload/ticket/:did/:hid                                controllers.lottery.ticket.TicketUpload.upload(did:Long, hid:String)
+GET         /upload/listAsAttachment/:did/:hid                      controllers.lottery.ticket.TicketUpload.listByDrawing(did:Long, hid:String)
+
+# statistics
+GET         /statistics/get                                         controllers.lottery.statistics.Statistics.get()
+
+# Map static resources from the /public folder to the /public path
+GET         /public/*file                                           controllers.Assets.at(path="/public", file)
+
+GET         /assets/javascripts/routes                              controllers.Application.javascriptRoutes

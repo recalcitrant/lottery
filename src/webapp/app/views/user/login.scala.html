@@ -1,0 +1,44 @@
+@(user: Form[(String,String,String)], retUrl:String)(implicit flash: Flash)
+
+@import helper._
+
+<html>
+<head>
+	<title>Anmelden</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="expires" content="Mon, 20 Jul 1999 00:00:00 GMT">
+	<meta name="language" content="de">
+	<link rel="stylesheet" media="screen" href="/public/stylesheets/main.css">
+	<link rel="stylesheet" media="screen" href="/public/stylesheets/login.css">
+	<link rel="stylesheet" media="screen" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"/>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.min.js"></script>
+</head>
+<body>
+
+<div id="login" class="ui-dialog ui-widget ui-widget-content ui-corner-all">
+	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+		<span class="ui-dialog-title" id="ui-dialog-title-add_new_user_dialog_form">Anmelden</span>
+	</div>
+	@form(controllers.auth.routes.Authentication.authenticate) {
+	<input type="hidden" id="returnUrl" name="returnUrl" value='@user("returnUrl").value.getOrElse(retUrl)'/>
+	<ul class="dialog">
+		<li>
+			<label for="username">@Messages("username")</label>
+			<input type="text" id="username" name="username" value='@user("username").value' maxlength="255"/>
+		</li>
+		<li>
+			<label for="password">@Messages("password")</label>
+			<input type="password" id="password" name="password" maxlength="255"/>
+		</li>
+	</ul>
+	<input type="submit" id="submitlogin" value="Anmelden" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"/>
+	}
+</div>
+
+<script type="text/javascript">
+	$(function () {
+		$("#username").focus();
+	});
+</script>
+</body>
+</html>

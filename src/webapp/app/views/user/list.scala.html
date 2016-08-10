@@ -1,0 +1,37 @@
+@(users:Seq[models.auth.User], nav: => Html, lid:Long, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import controllers.auth._
+@import views.html.helpers._
+@import utils.FieldEncrypt._
+@import models.auth.User._
+
+@main(title = "Benutzerverwaltung", nav) {
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@msg}</p>
+
+<table id="user_list">
+	<thead>
+	<tr>
+		<th class="email">Benutzername</th>
+		<th class="email">E-Mail</th>
+		<th class="email">Rolle</th>
+		<th class="email">Bearbeiten</th>
+		<th class="email">Löschen</th>
+	</tr>
+	</thead>
+	<tbody>
+	@users.map { user =>
+	<tr class="user">
+		<td id="list_username">@user.username</td>
+		<td id="list_email">@user.email</td>
+		<td id="list_role">@user.permissions.map{p=>@p.name}.mkString(", ")</td>
+		<td><a href="#" id="useredit_@user.id.get" class="user_edit" onclick='userEdit("@user.id.get", "@user.hid", "@hasPermission(session.get("username").getOrElse("undefined"), Admin)")'></a></td>
+		<td><a id="userdel_@user.id.get" href="#" class="user_delete" onclick="userRm('@user.username', '@user.email', '@controllers.auth.routes.Users.delete(user.id.get, user.hid)');"></a></td>
+	</tr>
+	}
+	<tr>
+		<td colspan="3"><a id="adduser@lid-@sign(lid)" href="#" class="user_add">Neuen Benutzer anlegen</a></td>
+	</tr>
+	</tbody>
+</table>
+}

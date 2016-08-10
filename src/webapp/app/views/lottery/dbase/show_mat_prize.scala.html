@@ -1,0 +1,29 @@
+@(p:Option[models.lottery.prize.Prize], lid:Long)
+
+<table>
+	<tbody>
+	@p.map { prize =>
+	<tr>
+		<td class="bold">
+			@prize.title
+		</td>
+	</tr>
+	<tr>
+		<td>
+			@prize.description
+		</td>
+	</tr>
+	<tr>
+		<td>
+			@prize.uploads.map{upload =>
+			@if(upload.url.toLowerCase.endsWith("pdf")) {
+				<a href="/prize/showfilebylid/@upload.id.get/@lid">@upload.url</a><br/>
+			} else {			
+				<img border="0" src="/prize/showfilebylid/@upload.id.get/@lid"/> <br/>
+			}
+			}
+		</td>
+	</tr>
+	}
+	</tbody>
+</table>

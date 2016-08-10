@@ -1,0 +1,8 @@
+@(user: Form[controllers.auth.UpdateUser], name:String, label:String, typ:String="text")
+
+<li>
+    @user.forField(name) { field =>
+        <label for="@name">@label</label>
+        <input id="@name" name="@name" type="@typ" value='@if("password" == typ){}else{@field.value}'>
+    }
+</li>

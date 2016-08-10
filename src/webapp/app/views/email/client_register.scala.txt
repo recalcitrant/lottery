@@ -1,0 +1,18 @@
+@(client:models.client.Client, body:String, pw:String)
+Sehr geehrte@if("Herr"== client.salutation){r}else{} @client.salutation @client.lastName,
+
+vielen Dank für Ihre Anmeldung zur automatischen Gewinnbenachrichtigung.
+Ab jetzt werden Sie im Gewinnfall per E-Mail informiert.
+
+Ihre Daten: @client.salutation @client.firstName @client.lastName
+
+Ihr Kennwort zur Änderung Ihrer Daten lautet: @pw
+
+@body
+
+Ihre @client.branch.name
+
+Diese E-Mail wurde automatisch erstellt. Bitte antworten Sie nicht auf diese Nachricht. Gerne beantwortet Ihr Berater Ihre Fragen.
+
+Sie können sich unter folgendem Link anmelden:
+<@client.branch.url@client.branch.loginUrl>

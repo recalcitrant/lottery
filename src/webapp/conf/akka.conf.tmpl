@@ -1,0 +1,45 @@
+akka {
+    log-config-on-start = on
+    loggers = ["akka.event.slf4j.Slf4jLogger"]
+    loglevel = ERROR
+
+    debug {
+        #enable function of LoggingReceive, which is to log any received message at
+        #DEBUG level
+        receive = on
+    }
+}
+
+play.akka {
+
+    actor {
+
+      retrieveBodyParserTimeout = 15 seconds
+
+      default-dispatcher = {
+        fork-join-executor {
+            parallelism-min = 1
+            parallelism-max = 24
+        }
+      }
+      application = {
+        fork-join-executor {
+            parallelism-max = 300
+        }
+      }
+      db = {
+        executor = "thread-pool-executor"
+        thread-pool-executor {
+            core-pool-size-factor = 1.0
+            core-pool-size-min = 256
+            core-pool-size-max = 256
+            max-pool-size-factor = 1.0
+            max-pool-size-min = 256
+            max-pool-size-max = 256
+        }
+      }
+    }
+    winningnotification {
+      mail.check.interval = 1
+    }
+}

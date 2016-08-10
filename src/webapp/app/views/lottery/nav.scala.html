@@ -1,0 +1,10 @@
+@(msg:String="")(implicit session:play.api.mvc.Session)
+
+@import utils.FieldEncrypt._
+@import models.auth.User._
+
+<a id="nav_drawing_overview" href='@controllers.lottery.drawing.routes.Drawing.list("")' class="nav">Ziehungsübersicht</a>
+@if(hasPermission(session.get("username").getOrElse("undefined"), Redakteur)) {
+	| <a id="nav_drawing_base_list" href='@controllers.lottery.dbase.routes.DBase.list(byUsername(session.get("username").get).get.lottery.id.get, sign(byUsername(session.get("username").get).get.lottery.id.get), "")' class="nav">Ziehungsbasis</a>
+	| <a id="nav_drawing_administration" href='@controllers.lottery.routes.Misc.list' class="nav">Allgemein</a>
+}

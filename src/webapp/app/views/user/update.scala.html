@@ -1,0 +1,42 @@
+@(id: Long, isAdmin: Boolean, permToEdit: Long, user: Form[controllers.auth.UpdateUser])(implicit session: play.api.mvc.Session)
+
+@import models.auth.User._
+@import views.html.helpers._
+@import models.auth.UserConstants
+
+<form id="edit-user-form" action='@controllers.auth.routes.Users.update(id)' method="POST">
+
+    <input id="id" name="id" type="hidden" value='@user("id").value'>
+    <input id="hid" name="hid" type="hidden" value='@user("hid").value'>
+    <input id="lid" name="lid" type="hidden" value='@user("lid").value'>
+    <input id="hlid" name="hlid" type="hidden" value='@user("hlid").value'>
+    <input id="selfedit" name="selfedit" type="hidden" value='@(user("username").value == session.get("username"))'>
+
+    <ul class="dialog">
+        <li class="error"></li>
+    </ul>
+
+    <ul class="dialog">
+        @user_update_helper(user, "username", "Username")
+        @user_update_helper(user, "email", "E-Mail")
+        @user_update_helper(user, "password", "Passwort", "password")
+        @user_update_helper(user, "passwordrep", "Passwort Wiederh.", "password")
+    </ul>
+    <div id="permission_head">Rollen:</div>
+    <ul class="dialog">
+
+        <li>
+            <label for="permission_1">Admin</label>
+            <input id="permission_1" class="user_permissions" @if(permToEdit == 1) { checked="checked" } else {@if(!isAdmin) {disabled}} type="radio" name="permissions" value="1"/>
+        </li>
+        <li>
+            <label for="permission_2">Redakteur</label>
+            <input id="permission_2" class="user_permissions" @if(permToEdit == 2) {checked="checked"} @if(permToEdit == 3 && !isAdmin) {disabled} type="radio" name="permissions" value="2"/>
+        </li>
+        <li>
+            <label for="permission_3">Freigeber</label>
+            <input id="permission_3" class="user_permissions" @if(permToEdit == 3) {checked="checked"} @if(permToEdit == 2 && !isAdmin) {disabled} type="radio" name="permissions" value="3"/>
+        </li>
+
+    </ul>
+</form>

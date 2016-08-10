@@ -1,0 +1,373 @@
+html {
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 62.5%;
+}
+
+body {
+    background-color: #f7f7f7;
+    color: #333;
+    font-size: 1.2em;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+a {
+    color: #c00;
+    text-decoration: none;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+li {
+    list-style-type: none;
+}
+
+dl {
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+dt {
+    clear: left;
+    float: left;
+    line-height: 1.5em;
+    width: 120px;
+}
+
+ul {
+    margin-bottom: 10px;
+}
+
+.border-error {
+    border: 1px solid red;
+}
+
+.error {
+    color: red;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* Icons */
+
+a.download, a.email, a.info, a.edit, a.euro, a.use, a.add, a.apply, a.go_right, a.user_edit, a.page_white_put, a.page_white_get, a.page_white_key, a.page_white_edit, a.user_delete, a.go_left, a.delete, a.group_add, a.lock_add, a.lock_break, a.lock_open, a.locks, a.move_left, a.move_right, a.role_apply, a.upload, a.user_add, a.workflow_apply, a.workflow_remove {
+    background: no-repeat 0 45%;
+    padding: 2px 0 2px 20px;
+}
+
+a.info {
+    background-image: url(../images/information.png);
+}
+
+a.email{
+    background-image: url(../images/email.png);
+}
+
+a.add {
+    background-image: url(../images/application_add.png);
+}
+
+a.edit {
+    background-image: url(../images/application_edit.png);
+}
+
+a.edit_winning_notification_email {
+    background-image: url(../images/email_edit.png);
+}
+
+a.euro {
+    background-image: url(../images/money_euro.png);
+}
+
+a.use {
+    background-image: url(../images/application_go.png);
+}
+
+a.delete {
+    background-image: url(../images/application_delete.png);
+}
+
+a.group_add {
+    background-image: url(../images/group_add.png);
+}
+
+a.go_left {
+    background-image: url(../images/bullet_go_left.png);
+}
+
+a.go_right {
+    background-image: url(../images/bullet_go.png);
+}
+
+a.role_apply {
+    background-image: url(../images/group_go.png);
+}
+
+a.user_edit {
+    background-image: url(../images/user_edit.png);
+}
+
+a.user_add {
+    background-image: url(../images/user_add.png);
+}
+
+a.user_delete {
+    background-image: url(../images/user_delete.png);
+}
+
+a.page_white_edit {
+    background-image: url(../images/page_white_edit.png);
+}
+
+a.page_white_put {
+    background-image: url(../images/page_white_put.png);
+}
+
+a.page_white_key {
+    background-image: url(../images/page_white_key.png);
+}
+
+a.page_white_get {
+    background-image: url(../images/page_white_get.png);
+}
+
+/* Site layout */
+
+#header {
+    background-color: #f10000;
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(162, 0, 0)), color-stop(0.24, rgb(196, 0, 0)), color-stop(1, rgb(241, 0, 0)));
+    background-image: -moz-linear-gradient(center bottom, rgb(162, 0, 0) 0%, rgb(196, 0, 0) 24%, rgb(241, 0, 0) 100%);
+    border-bottom: 1px solid #fff;
+    color: #fff;
+    height: 75px;
+}
+
+#header .right {
+    float: right;
+    margin: 13px 10px 0 0;
+    text-align: right;
+}
+
+#header #user-login-status a {
+    color: #fff;
+}
+
+#header #user-login-status a.logout {
+    font-weight: bold;
+}
+
+#header input {
+    border: 1px solid #c60000;
+    color: #666;
+    height: 17px;
+    margin: 10px 0 0 0;
+    padding: 2px 4px;
+    width: 150px;
+}
+
+#container {
+    overflow: auto;
+    padding: 10px;
+    width: auto;
+}
+
+#right {
+    float: left;
+    width: 80%;
+}
+
+#left {
+    float: left;
+    width: 15%;
+}
+
+#content {
+    overflow: auto;
+    padding: 10px 10px 0 10px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.none {
+    display: none;
+}
+
+.displaynone {
+    display: none;
+}
+
+/* Navigation */
+
+a.nav {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.nav {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Tables */
+
+table {
+    border: 1px solid #e9e9e9;
+    margin: 0 0 20px 0;
+    width: 100%;
+}
+
+table thead {
+    border-bottom: 1px solid #e9e9e9;
+}
+
+table thead th {
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.11, rgb(242, 242, 242)), color-stop(1, rgb(255, 255, 255)));
+    background-image: -moz-linear-gradient(center bottom, rgb(242, 242, 242) 11%, rgb(255, 255, 255) 100%);
+    color: #666;
+    padding: 7px;
+    text-align: left;
+    text-shadow: #fff 1px 1px 0;
+}
+
+table tbody td {
+    border-bottom: 1px solid #e9e9e9;
+    padding: 7px;
+    vertical-align: middle;
+}
+
+table tbody td.icons {
+    text-align: right;
+}
+
+table tbody td.icons a {
+    display: inline-block;
+    text-indent: 9999px;
+    height: 16px;
+    overflow: hidden;
+    padding: 0;
+    width: 16px;
+}
+
+table.top tbody td {
+    vertical-align: top;
+}
+
+/* Forms */
+
+label {
+    display: block;
+}
+
+label.textarea {
+    vertical-align: top;
+}
+
+form input, form select, form textarea {
+    margin-bottom: 10px;
+}
+
+input[type="checkbox"] + label {
+    display: inline-block;
+    margin-bottom: 10px;
+    vertical-align: bottom;
+}
+
+form li {
+    margin-bottom: 1em;
+}
+
+form ul.dialog label {
+    display: inline-block;
+    width: 100px;
+}
+
+p.validateTips {
+    background-color: #fffcdd;
+    border: 1px solid #fff29c;
+    margin: 0 0 20px 0;
+    padding: 5px;
+}
+
+ul.actions {
+    line-height: 2em;
+}
+
+ul.flags label {
+    width: auto;
+}
+
+ul.flags input[type="checkbox"] + label {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+/* Node details  */
+
+a.node_link {
+    border: 5px solid #eee;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 5px;
+    vertical-align: top;
+}
+
+ul.node_info {
+    display: inline-block;
+    line-height: 1.3em;
+    margin: 7px 0 0 10px;
+}
+
+ul.node_info li.node_name {
+    color: #c00;
+    font-size: 1.4em;
+    height: 1em;
+    margin-bottom: 10px;
+}
+
+/* Messages */
+
+p.message {
+    background-color: #fffcdd;
+    border: 1px solid #fff29c;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    margin: 10px 0 15px 0;
+    padding: 10px;
+}
+
+/* */
+
+#submit_info_field_link {
+    display: none;
+}
+
+.floatleft {
+    float: left;
+}
+
+.clearleft {
+    clear: left;
+}
+
+.textarea_upload {
+    width: 350px;
+    height: 250px;
+}
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }

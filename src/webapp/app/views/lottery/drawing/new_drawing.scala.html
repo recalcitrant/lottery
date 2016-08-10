@@ -1,0 +1,80 @@
+@(base: models.lottery.dbase.DrawingBase, nav: => Html, msg:String = "")(implicit session:play.api.mvc.Session)
+
+@import utils.Format._
+@import utils.FieldEncrypt._
+@import models.lottery.prize.PrizeType
+@import models.lottery.LotteryType
+
+@main(title = "Neue Ziehung", nav) {
+
+<p id="message" class='message @if("" == msg) {hidden}'>@if("" != msg) {@msg}</p>
+
+<form id="add_new_drawing_form" method="POST">
+	<ul class="dialog">
+		<li>
+			<span class="bold">Ziehungstyp: @base.drawingType.name</span>
+		</li>
+		<li>
+			<label for="drawing_date">Datum der aktuellen Ziehung:</label>
+			<input id="drawing_date" name="drawing_date" type="text"/>
+		</li>
+		<li>
+			<label for="date_winning_notification">Datum des Mailversands der aktuellen Ziehung:</label>
+			<input id="date_winning_notification" name="date_winning_notification" type="text"/><a href="#" class="info"></a>
+		</li>
+		<li>
+			<label for="drawing_date_next">Datum der nächsten Ziehung:</label>
+			<input id="drawing_date_next" name="drawing_date_next" type="text"/>
+		</li>
+        <li>
+            <label for="drawing_date_publish_next">Veröffentlichung der nächsten Ziehung:</label>
+            <input id="drawing_date_publish_next" name="drawing_date_publish_next" type="text"/>
+        </li>
+		<li>
+			<table id="drawings_list">
+				<thead>
+				<tr>
+					<th>Gewinn</th>
+					<th>Endziffer(n)</th>
+                    <th>Mailversand am</th>
+					<th>Hinzufügen</th>
+					<th>Löschen</th>
+				</tr>
+				</thead>
+				<tbody>
+				@base.prizes.view.zipWithIndex.map { case(prize,counter) =>
+				<tr>
+					@if(PrizeType.CASH == prize.prizeType.id.get) {
+					<td>@currency(prize.value)</td>
+					} else {
+					<td>@prize.title.getOrElse("Keine Angabe")</td>
+					}
+					<td><input id="digits-@prize.id.get-@counter" name="digits-@prize.id.get-@counter" maxlength="255"/></td>
+                    <td><input class="digits_winning_notification" id="digits_winning_notification_@prize.id.get" name="digits_winning_notification_@prize.id.get" maxlength="255"/></td>
+					<td><a href="#" id="add_new_drawing_row-@prize.id.get-@counter" class="add add_prize_to_new_drawing"></a></td>
+					<td><a href="#" id="delete_prize_from_new_drawing-@prize.id.get-@counter" class="delete delete_prize_from_new_drawing"></a></td>
+				</tr>
+				}
+				<tr>
+					<td><input type="button" id="submit_new_drawing" name="submit_new_drawing" value="Speichern"/></td>
+				</tr>
+				</tbody>
+			</table>
+		</li>
+
+	</ul>
+</form>
+}
+
+<script type="text/javascript">
+
+	$(function () {
+		drawing.setUrl("@controllers.lottery.drawing.routes.Drawing.add(base.id.get)");
+		drawing.setCash("@PrizeType.CASH");
+		drawing.setMat("@PrizeType.MATERIAL");
+		$("#submit_new_drawing").click(function () {
+			drawing.submitNew();
+		});
+	});
+
+</script>

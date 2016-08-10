@@ -1,0 +1,7 @@
+@(comment:String, state:String)
+@import utils.Config
+Neuer Status: @state
+
+@comment
+
+zur Anwendung : @Config.getString("server.url")/drawing/list

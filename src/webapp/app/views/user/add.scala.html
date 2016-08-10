@@ -1,0 +1,36 @@
+@(user: Form[controllers.auth.InsertUser], lid:Long, hlid:String)(implicit session:play.api.mvc.Session)
+
+@import helper._
+@import views.html.helpers._
+
+<form action="@controllers.auth.routes.Users.add(lid, hlid)" id="add-user-form" method="POST">
+
+	<input id="gid" name="gid" type="hidden" value='@user("gid").value'>
+	<input id="hgid" name="hgid" type="hidden" value='@user("hgid").value'>
+
+	<ul class="dialog">
+		<li class="error"></li>
+	</ul>
+	<ul class="dialog">
+		@user_insert_helper(user, "username", "Benutzername")
+		@user_insert_helper(user, "email", "E-Mail")
+		@user_insert_helper(user, "password", "Passwort", "password")
+		@user_insert_helper(user, "passwordrep", "Passwort (Wiederh.)", "password")
+	</ul>
+	<div id="permission_head">Rollen:</div>
+	<ul class="dialog">
+		<li>
+			<label for="permission_1">Admin</label>
+			<input id="permission_1" type="radio" name="permissions" value="1"/>
+		</li>
+		<li>
+			<label for="permission_2">Redakteur</label>
+			<input id="permission_2" type="radio" name="permissions" value="2"/>
+		</li>
+		<li>
+			<label for="permission_3">Freigeber</label>
+			<input id="permission_3" type="radio" name="permissions" value="3"/>
+		</li>
+	</ul>
+
+</form>
